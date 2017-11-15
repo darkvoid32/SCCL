@@ -65,14 +65,16 @@ public class PuzzleActivity extends AppCompatActivity{
 
         for(int i = 0; i < bitmapPieces.size();i++) {
             ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
+            Log.i("Pieces size", String.valueOf(bitmapPieces.get(i).getWidth()));
             imagePieces.add(piece);
         }
 
-        TableRow row1 = findViewById(R.id.firstRow);
-        TableRow row2 = findViewById(R.id.secondRow);
-        TableRow row3 = findViewById(R.id.thirdRow);
+        LinearLayout row1 = findViewById(R.id.firstRow);
+        LinearLayout row2 = findViewById(R.id.secondRow);
+        LinearLayout row3 = findViewById(R.id.thirdRow);
 
-        for(int i = 0;i < imagePieces.size();i++){
+        for(int i = 0;i < imagePieces.size();i++){ //Adding bitmaps to the rows 1/2/3
+            int imWidth = imagePieces.get(i).getLayoutParams().width;
             if(i < imagePieces.size()/3){
                 row1.addView(imagePieces.get(i));
             }else if(i < (imagePieces.size()/3)*2){
@@ -88,6 +90,7 @@ public class PuzzleActivity extends AppCompatActivity{
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int userHeight = displayMetrics.heightPixels;
         int userwWidth = displayMetrics.widthPixels;
+        Log.i("Parent Size", String.valueOf(userwWidth));
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 

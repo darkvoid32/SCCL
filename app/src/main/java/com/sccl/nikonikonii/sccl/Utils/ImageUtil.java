@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 public class ImageUtil {
+    public int picHeight, picWidth;
 
     public ImageUtil(){}
 
@@ -20,11 +21,7 @@ public class ImageUtil {
 
         BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
-        Log.i("ImageSplit Y Total", String.valueOf(bitmap.getHeight()));
-        Log.i("ImageSplit X Total", String.valueOf(bitmap.getWidth()));
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
-        Log.i("ImageSplit Y Total", String.valueOf(scaledBitmap.getHeight()));
-        Log.i("ImageSplit X Total", String.valueOf(scaledBitmap.getWidth()));
 
         splitHeight = scaledBitmap.getHeight()/rows;
         splitWidth = scaledBitmap.getWidth()/columns;
@@ -34,14 +31,11 @@ public class ImageUtil {
             int xCoord = 0;
             for(int y=0; y<columns; y++){
                 splitImages.add(Bitmap.createBitmap(scaledBitmap, xCoord, yCoord, splitWidth, splitHeight));
+                Log.i("Pieces size x", String.valueOf(xCoord));
                 xCoord += splitWidth;
-                Log.i("ImageSplit X", String.valueOf(xCoord));
             }
             yCoord += splitHeight;
-            Log.i("ImageSplit Y", String.valueOf(yCoord));
         }
-        Log.i("ImageSplit Y Total", String.valueOf(scaledBitmap.getHeight()));
-        Log.i("ImageSplit X Total", String.valueOf(scaledBitmap.getWidth()));
 
         return splitImages;
     }
