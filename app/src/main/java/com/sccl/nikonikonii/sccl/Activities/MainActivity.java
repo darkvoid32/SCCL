@@ -1,5 +1,6 @@
 package com.sccl.nikonikonii.sccl.Activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
@@ -19,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().hide();
+
+        Intent i = new Intent(getApplicationContext(), PuzzleActivity.class);
+        startActivity(i);
 
         //todos in order of how user will see when they enter the game, delete when finished
         //TODO Log in screen
