@@ -61,7 +61,7 @@ public class PuzzleActivity extends AppCompatActivity{
         ImageUtil imgUtil = new ImageUtil();
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
-        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12); // Correct...?
+        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
 
         for(int i = 0; i < bitmapPieces.size();i++) {
             ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
@@ -83,6 +83,7 @@ public class PuzzleActivity extends AppCompatActivity{
                 row3.addView(imagePieces.get(i));
             }
         }
+
     }
 
     private void setLayoutParams(){
