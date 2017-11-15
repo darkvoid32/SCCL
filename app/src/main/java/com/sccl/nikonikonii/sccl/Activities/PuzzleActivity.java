@@ -7,6 +7,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 
 public class PuzzleActivity extends AppCompatActivity{
 
-    private ImageView mascotIV;
+    private ImageView mascotIV, puzzleInit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,12 @@ public class PuzzleActivity extends AppCompatActivity{
         });
 
         mascotIV = findViewById(R.id.mascotIV);
-        ImageView puzzleInit = findViewById(R.id.puzzleInit);
+
+        puzzleInit = findViewById(R.id.puzzleInit);
         puzzleInit.setVisibility(View.INVISIBLE);
+
+        Log.i("ImageSplit Y Total", String.valueOf(puzzleInit.getHeight()));
+        Log.i("ImageSplit Y Total", String.valueOf(puzzleInit.getHeight()));
 
         setLayoutParams();
 

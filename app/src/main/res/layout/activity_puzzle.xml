@@ -23,7 +23,7 @@
         android:adjustViewBounds="true"/>
 
     <FrameLayout
-        android:layout_width="380dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -48,6 +48,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:id="@+id/secondRow">
 
@@ -56,6 +57,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:id="@+id/thirdRow">
 
@@ -65,14 +67,10 @@
 
         <ImageView
             android:id="@+id/puzzleInit"
-            android:layout_width="380dp"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@drawable/roti_prata1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"/>
+            android:adjustViewBounds="true" />
 
     </FrameLayout>
 </RelativeLayout>
