@@ -20,7 +20,11 @@ public class ImageUtil {
 
         BitmapDrawable drawable = (BitmapDrawable) image.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
+        Log.i("ImageSplit Y Total", String.valueOf(bitmap.getHeight()));
+        Log.i("ImageSplit X Total", String.valueOf(bitmap.getWidth()));
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+        Log.i("ImageSplit Y Total", String.valueOf(scaledBitmap.getHeight()));
+        Log.i("ImageSplit X Total", String.valueOf(scaledBitmap.getWidth()));
 
         splitHeight = scaledBitmap.getHeight()/rows;
         splitWidth = scaledBitmap.getWidth()/columns;

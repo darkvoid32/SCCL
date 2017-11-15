@@ -56,15 +56,12 @@ public class PuzzleActivity extends AppCompatActivity{
         puzzleInit = findViewById(R.id.puzzleInit);
         puzzleInit.setVisibility(View.INVISIBLE);
 
-        Log.i("ImageSplit Y Total", String.valueOf(puzzleInit.getHeight()));
-        Log.i("ImageSplit Y Total", String.valueOf(puzzleInit.getHeight()));
-
         setLayoutParams();
 
         ImageUtil imgUtil = new ImageUtil();
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
-        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
+        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12); // Correct...?
 
         for(int i = 0; i < bitmapPieces.size();i++) {
             ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
