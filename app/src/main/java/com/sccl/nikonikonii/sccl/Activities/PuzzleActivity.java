@@ -3,6 +3,7 @@ package com.sccl.nikonikonii.sccl.Activities;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -47,6 +48,7 @@ public class PuzzleActivity extends AppCompatActivity{
             }
         });
 
+        ImageView mascotIV = findViewById(R.id.mascotIV);
         ImageView puzzleInit = findViewById(R.id.puzzleInit);
         puzzleInit.setVisibility(View.INVISIBLE);
 
