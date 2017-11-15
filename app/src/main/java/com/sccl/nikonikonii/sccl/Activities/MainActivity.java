@@ -1,7 +1,9 @@
-package com.sccl.nikonikonii.sccl;
+package com.sccl.nikonikonii.sccl.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.sccl.nikonikonii.sccl.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -10,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //todos in order of how user will see when they enter the game
+        //todos in order of how user will see when they enter the game, delete when finished
         //TODO Log in screen
         //TODO Player Data Structure
         //TODO Choose level of education
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             //Simple sentence structure
 
         //TODO Sound effects
-        //TODO mascot to give congratulation message/ try harder message or smthing
+        //TODO mascot to give congratulation message/ try harder message or something
         //TODO Leveling & Achievement system + Badges
         //TODO Customization
         //Harder shit
