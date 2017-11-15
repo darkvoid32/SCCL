@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class PuzzleActivity extends AppCompatActivity{
 
     private ImageView mascotIV, puzzleInit;
+    private LinearLayout rootLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,6 @@ public class PuzzleActivity extends AppCompatActivity{
         LinearLayout row3 = findViewById(R.id.thirdRow);
 
         for(int i = 0;i < imagePieces.size();i++){ //Adding bitmaps to the rows 1/2/3
-            int imWidth = imagePieces.get(i).getLayoutParams().width;
             if(i < imagePieces.size()/3){
                 row1.addView(imagePieces.get(i));
             }else if(i < (imagePieces.size()/3)*2){
@@ -100,5 +100,16 @@ public class PuzzleActivity extends AppCompatActivity{
         lp.setMargins(0, userHeight/2, 0, 0);
         mascotIV.setLayoutParams(lp);
         mascotIV.requestLayout();
+
+        //TODO Remove hardcoding
+        rootLL = findViewById(R.id.rootLL);
+        RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        lp2.height = (userHeight / 7) * 4; // Dynamically set height
+        lp2.width = (userwWidth / 4) * 3;
+        lp2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        lp2.addRule(RelativeLayout.CENTER_VERTICAL);
+        lp2.rightMargin = -125;
+        rootLL.setLayoutParams(lp2);
+        rootLL.requestLayout();
     }
 }

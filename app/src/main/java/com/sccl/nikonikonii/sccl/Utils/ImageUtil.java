@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 public class ImageUtil {
-    public int picHeight, picWidth;
 
     public ImageUtil(){}
 
@@ -31,7 +30,6 @@ public class ImageUtil {
             int xCoord = 0;
             for(int y=0; y<columns; y++){
                 splitImages.add(Bitmap.createBitmap(scaledBitmap, xCoord, yCoord, splitWidth, splitHeight));
-                Log.i("Pieces size x", String.valueOf(xCoord));
                 xCoord += splitWidth;
             }
             yCoord += splitHeight;
