@@ -2,6 +2,8 @@ package com.sccl.nikonikonii.sccl.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.sccl.nikonikonii.sccl.R;
 
@@ -10,7 +12,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE); // Remove title
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // Full Screen
+
         setContentView(R.layout.activity_main);
+
+        getSupportActionBar().hide();
 
         //todos in order of how user will see when they enter the game, delete when finished
         //TODO Log in screen
