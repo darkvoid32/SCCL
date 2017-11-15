@@ -76,9 +76,9 @@ public class PuzzleActivity extends AppCompatActivity{
         TableRow row3 = findViewById(R.id.thirdRow);
 
         for(int i = 0;i < imagePieces.size();i++){
-            if(i <= imagePieces.size()/3){
+            if(i < imagePieces.size()/3){
                 row1.addView(imagePieces.get(i));
-            }else if(i <= (imagePieces.size()/3)*2){
+            }else if(i < (imagePieces.size()/3)*2){
                 row2.addView(imagePieces.get(i));
             }else{
                 row3.addView(imagePieces.get(i));
