@@ -35,11 +35,13 @@
         android:layout_marginRight="50dp">
 
         <TableLayout
-            android:layout_width="380dp"
-            android:layout_height="300dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:id="@+id/firstRow">
 
 
@@ -47,6 +49,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:id="@+id/secondRow">
 
 
@@ -54,6 +57,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:id="@+id/thirdRow">
 
 
