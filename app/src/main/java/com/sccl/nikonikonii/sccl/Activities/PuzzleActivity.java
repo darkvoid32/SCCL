@@ -1,5 +1,6 @@
 package com.sccl.nikonikonii.sccl.Activities;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,8 +11,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TableRow;
 
 import com.sccl.nikonikonii.sccl.R;
+import com.sccl.nikonikonii.sccl.Utils.ImagePiece;
+import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
+
+import java.util.ArrayList;
 
 public class PuzzleActivity extends AppCompatActivity{
 
@@ -41,7 +47,8 @@ public class PuzzleActivity extends AppCompatActivity{
             }
         });
 
-        mascotIV = findViewById(R.id.mascotIV); // Getting mascot ImageView
+        ImageView puzzleInit = findViewById(R.id.puzzleInit);
+        puzzleInit.setVisibility(View.INVISIBLE);
 
         DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -52,5 +59,28 @@ public class PuzzleActivity extends AppCompatActivity{
         mascotIV.getLayoutParams().width = (userwWidth / 2);
         mascotIV.requestLayout();
 
+        ImageUtil imgUtil = new ImageUtil();
+
+        ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
+        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
+
+        for(int i = 0; i < bitmapPieces.size();i++) {
+            ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
+            imagePieces.add(piece);
+        }
+
+        TableRow row1 = findViewById(R.id.firstRow);
+        TableRow row2 = findViewById(R.id.secondRow);
+        TableRow row3 = findViewById(R.id.thirdRow);
+
+        for(int i = 0;i < imagePieces.size();i++){
+            if(i <= imagePieces.size()/3){
+                row1.addView(imagePieces.get(i));
+            }else if(i <= (imagePieces.size()/3)*2){
+                row2.addView(imagePieces.get(i));
+            }else{
+                row3.addView(imagePieces.get(i));
+            }
+        }
     }
 }
