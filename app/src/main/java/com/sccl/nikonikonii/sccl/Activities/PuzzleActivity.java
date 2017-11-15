@@ -12,6 +12,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 
 import com.sccl.nikonikonii.sccl.R;
@@ -48,18 +50,11 @@ public class PuzzleActivity extends AppCompatActivity{
             }
         });
 
-        ImageView mascotIV = findViewById(R.id.mascotIV);
+        mascotIV = findViewById(R.id.mascotIV);
         ImageView puzzleInit = findViewById(R.id.puzzleInit);
         puzzleInit.setVisibility(View.INVISIBLE);
 
-        DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int userHeight = displayMetrics.heightPixels;
-        int userwWidth = displayMetrics.widthPixels;
-
-        mascotIV.getLayoutParams().height = (userHeight / 2);
-        mascotIV.getLayoutParams().width = (userwWidth / 2);
-        mascotIV.requestLayout();
+        setLayoutParams();
 
         ImageUtil imgUtil = new ImageUtil();
 
@@ -84,5 +79,20 @@ public class PuzzleActivity extends AppCompatActivity{
                 row3.addView(imagePieces.get(i));
             }
         }
+    }
+
+    private void setLayoutParams(){
+        DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int userHeight = displayMetrics.heightPixels;
+        int userwWidth = displayMetrics.widthPixels;
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        mascotIV.getLayoutParams().height = (userHeight / 2);
+        mascotIV.getLayoutParams().width = (userwWidth / 2);
+        lp.setMargins(0, userHeight/2, 0, 0);
+        mascotIV.setLayoutParams(lp);
+        mascotIV.requestLayout();
     }
 }
