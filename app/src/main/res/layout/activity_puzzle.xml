@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/panda0"
         android:id="@+id/mascotIV"
+        android:layout_centerVertical="true"
         android:adjustViewBounds="true"/>
 
 </RelativeLayout>

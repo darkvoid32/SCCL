@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -42,6 +43,14 @@ public class PuzzleActivity extends AppCompatActivity{
 
         mascotIV = findViewById(R.id.mascotIV); // Getting mascot ImageView
 
-        
+        DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int userHeight = displayMetrics.heightPixels;
+        int userwWidth = displayMetrics.widthPixels;
+
+        mascotIV.getLayoutParams().height = (userHeight / 2);
+        mascotIV.getLayoutParams().width = (userwWidth / 2);
+        mascotIV.requestLayout();
+
     }
 }
