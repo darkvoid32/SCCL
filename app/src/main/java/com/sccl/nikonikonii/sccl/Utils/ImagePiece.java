@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -38,6 +39,8 @@ public class ImagePiece extends android.support.v7.widget.AppCompatImageView imp
     public int getCurrentIndex() {
         return currentIndex;
     }
+
+
 
     public int getOriginalIndex(){
         return originalIndex;

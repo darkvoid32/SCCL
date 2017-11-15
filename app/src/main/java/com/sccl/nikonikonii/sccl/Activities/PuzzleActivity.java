@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -64,9 +65,16 @@ public class PuzzleActivity extends AppCompatActivity{
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
         ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
 
+        //TODO Figure out how to move IV around
         for(int i = 0; i < bitmapPieces.size();i++) {
-            ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
-            Log.i("Pieces size", String.valueOf(bitmapPieces.get(i).getWidth()));
+            final ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
+            piece.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Log.i("Touching ImageView", String.valueOf(piece.getOriginalIndex()));
+                    return false;
+                }
+            });
             imagePieces.add(piece);
         }
 
