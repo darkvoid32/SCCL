@@ -67,14 +67,14 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleInit.setVisibility(View.INVISIBLE);
         speechText = findViewById(R.id.speech_bubble_textView);
 
-        setLayoutParams();
+        setMascot();
 
         setPuzzlePiece();
 
-        creatMascotThread();
+        createMascotThread();
     }
 
-    private void creatMascotThread() {
+    private void createMascotThread() {
         t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -135,7 +135,7 @@ public class PuzzleActivity extends AppCompatActivity {
         ImageUtil imgUtil = new ImageUtil();
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
-        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
+        ArrayList<ImagePiece> imagePieces = new ArrayList<>(12);
 
         //TODO Figure out how to move IV around
         for (int i = 0; i < bitmapPieces.size(); i++) {
@@ -159,18 +159,16 @@ public class PuzzleActivity extends AppCompatActivity {
 
     }
 
-    private void setLayoutParams() {
+    private void setMascot() {
         DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int userHeight = displayMetrics.heightPixels;
-        int userwWidth = displayMetrics.widthPixels;
+        int userWidth = displayMetrics.widthPixels;
 
         //Layout params for mascot ImageView
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        mascotIV.getLayoutParams().height = (userHeight / 2);
-        mascotIV.getLayoutParams().width = (userwWidth / 2);
-        lp.setMargins(0, userHeight / 2, 0, 0);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(userHeight/2, userWidth/2);
+        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lp.setMargins(12, 0, 0, 1);
         mascotIV.setLayoutParams(lp);
         mascotIV.requestLayout();
 
@@ -181,7 +179,7 @@ public class PuzzleActivity extends AppCompatActivity {
         //speechIV.getLayoutParams().width = (userwWidth / 2);
         //lp3.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lp3.height = userHeight / 2;
-        lp3.width = userwWidth / 2;
+        lp3.width = userWidth / 2;
         speechRL.setLayoutParams(lp3);
         speechRL.requestLayout();
 
@@ -190,7 +188,7 @@ public class PuzzleActivity extends AppCompatActivity {
         rootLL = findViewById(R.id.rootLL);
         RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp2.height = (userHeight / 7) * 4; // Dynamically set height
-        lp2.width = (userwWidth / 4) * 3;
+        lp2.width = (userWidth / 4) * 3;
         lp2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         lp2.addRule(RelativeLayout.CENTER_VERTICAL);
         lp2.rightMargin = -125;
