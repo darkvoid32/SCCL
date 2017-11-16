@@ -27,6 +27,7 @@ import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
@@ -142,40 +143,53 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void setPuzzlePiece() {
+        ArrayList<Integer> ranNum = new ArrayList<Integer>(12);
         ImageUtil imgUtil = new ImageUtil();
-
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
         imagePieces = new ArrayList<>(12);
 
+        for (int i = 0; i < 12; i++) {
+            ranNum.add(i);
+            Log.i("ranNum", String.valueOf(i));
+        }
+
+        Collections.shuffle(ranNum);
+
         for (int i = 0; i < bitmapPieces.size(); i++) {
-            final ImagePiece piece = new ImagePiece(getApplicationContext(), this, bitmapPieces.get(i), i);
+            final ImagePiece piece = new ImagePiece(getApplicationContext(), this, bitmapPieces.get(i), i, ranNum.get(i));
             imagePieces.add(piece);
-            piece.setOriginalIndex(i);
-            piece.setCurrentIndex(i);
         }
 
         row1 = findViewById(R.id.firstRow);
         row2 = findViewById(R.id.secondRow);
         row3 = findViewById(R.id.thirdRow);
 
-        for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
-            if (i < imagePieces.size() / 3) {
-                row1.addView(imagePieces.get(i));
-            } else if (i < (imagePieces.size() / 3) * 2) {
-                row2.addView(imagePieces.get(i));
-            } else {
-                row3.addView(imagePieces.get(i));
-            }
-        }
+        addBitmapsToLL();
+    }
 
+    private void addBitmapsToLL() {
+        for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
+            for (int u = 0; u < imagePieces.size(); u++) {
+                if (imagePieces.get(u).getCurrentIndex() == i) {
+                    if (i < imagePieces.size() / 3) {
+                        row1.addView(imagePieces.get(u));
+                    } else if (i < (imagePieces.size() / 3) * 2) {
+                        row2.addView(imagePieces.get(u));
+                    } else {
+                        row3.addView(imagePieces.get(u));
+                    }
+                }
+            }
+            imagePieces.get(i).unScale();
+        }
     }
 
     public void switchPiece(ImagePiece ip){
         if(firstClicked == null){
-            firstClicked = ip;
-            Log.d("Click", "First Piece");
+            firstClicked = ip; //firstClicked = First ImagePiece clicked
+            Log.i("Click", "First Piece");
         }else{
-            Log.d("Click", "Second Piece");
+            Log.i("Click", "Second Piece");
             int temIndex = firstClicked.getCurrentIndex();
             firstClicked.setCurrentIndex(ip.getCurrentIndex());
             ip.setCurrentIndex(temIndex);
@@ -198,19 +212,12 @@ public class PuzzleActivity extends AppCompatActivity {
         row2.removeAllViews();
         row3.removeAllViews();
 
-        for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
-            if (i < imagePieces.size() / 3) {
-                row1.addView(imagePieces.get(i));
-            } else if (i < (imagePieces.size() / 3) * 2) {
-                row2.addView(imagePieces.get(i));
-            } else {
-                row3.addView(imagePieces.get(i));
-            }
-        }
+        addBitmapsToLL();
 
         row1.invalidate();
         row2.invalidate();
         row3.invalidate();
+
     }
 
     private void setMascot() {
