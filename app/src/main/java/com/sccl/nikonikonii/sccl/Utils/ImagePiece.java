@@ -8,18 +8,21 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class ImagePiece extends android.support.v7.widget.AppCompatImageView implements View.OnClickListener{
+import com.sccl.nikonikonii.sccl.Activities.PuzzleActivity;
+import com.sccl.nikonikonii.sccl.R;
 
+public class ImagePiece extends android.support.v7.widget.AppCompatImageView{
+
+    private PuzzleActivity puzzleActivity;
     private int originalIndex;
     private int currentIndex;
-    private Bitmap bitmap;
 
-    public ImagePiece(Context context, Bitmap bitmap, int originalIndex) {
+    public ImagePiece(Context context, PuzzleActivity pA,Bitmap bitmap, int originalIndex) {
         super(context);
+        puzzleActivity = pA;
         setImageBitmap(bitmap);
         this.originalIndex = originalIndex;
-        this.bitmap = bitmap;
-        setPadding(1,1,1,1);
+        setPadding(2,2,2,2);
         setBackgroundColor(Color.argb(255, 0, 0, 0));
         setAdjustViewBounds(true);
     }
@@ -40,25 +43,24 @@ public class ImagePiece extends android.support.v7.widget.AppCompatImageView imp
         return currentIndex;
     }
 
-    @Override
-    public boolean performClick() {
-        // Calls the super implementation, which generates an AccessibilityEvent
-        // and calls the onClick() listener on the view, if any
-        super.performClick();
-
-        // Handle the action for the custom click here
-
-        Log.i("Touching ImageView", String.valueOf(originalIndex));
-
-        return true;
-    }
-
     public int getOriginalIndex(){
         return originalIndex;
     }
 
     @Override
-    public void onClick(View view) {
-        setRotation(getRotation()+90);
+    public boolean onTouchEvent(final MotionEvent event) {
+        if(event.getAction() == MotionEvent.ACTION_UP){
+            return click();
+        }
+        return true;
+    }
+
+    public boolean click(){
+        Log.d("Click event", "Image clicked");
+        setScaleX(1.2f);
+        setScaleY(1.2f);
+        //TODO Sound
+        puzzleActivity.switchPiece(this);
+        return true;
     }
 }

@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +25,8 @@ import com.sccl.nikonikonii.sccl.Utils.ImagePiece;
 import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static java.lang.Thread.sleep;
 
@@ -36,6 +39,13 @@ public class PuzzleActivity extends AppCompatActivity {
     private boolean gameRunning = true;
     private int mascotPosition = 0;
     private TextView speechText;
+
+    private LinearLayout row1;
+    private LinearLayout row2;
+    private LinearLayout row3;
+
+    private ArrayList<ImagePiece> imagePieces;
+    private ImagePiece firstClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +77,14 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleInit.setVisibility(View.INVISIBLE);
         speechText = findViewById(R.id.speech_bubble_textView);
 
-        setLayoutParams();
+        setMascot();
 
         setPuzzlePiece();
 
-        creatMascotThread();
+        createMascotThread();
     }
 
-    private void creatMascotThread() {
+    private void createMascotThread() {
         t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -135,17 +145,18 @@ public class PuzzleActivity extends AppCompatActivity {
         ImageUtil imgUtil = new ImageUtil();
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
-        ArrayList<ImagePiece> imagePieces = new ArrayList<ImagePiece>(12);
+        imagePieces = new ArrayList<>(12);
 
-        //TODO Figure out how to move IV around
         for (int i = 0; i < bitmapPieces.size(); i++) {
-            final ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
+            final ImagePiece piece = new ImagePiece(getApplicationContext(), this, bitmapPieces.get(i), i);
             imagePieces.add(piece);
+            piece.setOriginalIndex(i);
+            piece.setCurrentIndex(i);
         }
 
-        LinearLayout row1 = findViewById(R.id.firstRow);
-        LinearLayout row2 = findViewById(R.id.secondRow);
-        LinearLayout row3 = findViewById(R.id.thirdRow);
+        row1 = findViewById(R.id.firstRow);
+        row2 = findViewById(R.id.secondRow);
+        row3 = findViewById(R.id.thirdRow);
 
         for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
             if (i < imagePieces.size() / 3) {
@@ -159,38 +170,61 @@ public class PuzzleActivity extends AppCompatActivity {
 
     }
 
-    private void setLayoutParams() {
+    public void switchPiece(ImagePiece ip){
+        if(firstClicked == null){
+            firstClicked = ip;
+            Log.d("Click", "First Piece");
+        }else{
+            Log.d("Click", "Second Piece");
+            int temIndex = firstClicked.getCurrentIndex();
+            firstClicked.setCurrentIndex(ip.getCurrentIndex());
+            ip.setCurrentIndex(temIndex);
+            firstClicked = null;
+            MovePieces();
+        }
+    }
+
+    private void MovePieces (){
+        //TODO Sort imagePieces based on current index;
+        Collections.sort(imagePieces, new Comparator<ImagePiece>(){
+            public int compare(ImagePiece p1, ImagePiece p2){
+                int a = p1.getCurrentIndex();
+                int b = p1.getCurrentIndex();
+                return Integer.compare(a,b);
+            }
+        });
+
+        row1.removeAllViews();
+        row2.removeAllViews();
+        row3.removeAllViews();
+
+        for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
+            if (i < imagePieces.size() / 3) {
+                row1.addView(imagePieces.get(i));
+            } else if (i < (imagePieces.size() / 3) * 2) {
+                row2.addView(imagePieces.get(i));
+            } else {
+                row3.addView(imagePieces.get(i));
+            }
+        }
+
+        row1.invalidate();
+        row2.invalidate();
+        row3.invalidate();
+    }
+
+    private void setMascot() {
         DisplayMetrics displayMetrics = new DisplayMetrics(); //Getting Screen height + width
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int userHeight = displayMetrics.heightPixels;
-        int userwWidth = displayMetrics.widthPixels;
-
-        //Layout params for mascot ImageView
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        mascotIV.getLayoutParams().height = (userHeight / 2);
-        mascotIV.getLayoutParams().width = (userwWidth / 2);
-        lp.setMargins(0, userHeight / 2, 0, 0);
-        mascotIV.setLayoutParams(lp);
-        mascotIV.requestLayout();
-
-        //Layout params for speech_bubble
-        RelativeLayout.LayoutParams lp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        //speechIV.getLayoutParams().height = (userHeight / 2);
-        //speechIV.getLayoutParams().width = (userwWidth / 2);
-        //lp3.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lp3.height = userHeight / 2;
-        lp3.width = userwWidth / 2;
-        speechRL.setLayoutParams(lp3);
-        speechRL.requestLayout();
+        int userWidth = displayMetrics.widthPixels;
 
         //Layout params for Puzzle Image
         //TODO Remove hardcoding
         rootLL = findViewById(R.id.rootLL);
         RelativeLayout.LayoutParams lp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp2.height = (userHeight / 7) * 4; // Dynamically set height
-        lp2.width = (userwWidth / 4) * 3;
+        lp2.width = (userWidth / 4) * 3;
         lp2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         lp2.addRule(RelativeLayout.CENTER_VERTICAL);
         lp2.rightMargin = -125;
