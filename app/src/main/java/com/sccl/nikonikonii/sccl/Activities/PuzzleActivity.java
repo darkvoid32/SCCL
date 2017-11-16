@@ -3,7 +3,6 @@ package com.sccl.nikonikonii.sccl.Activities;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -11,11 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.sccl.nikonikonii.sccl.R;
@@ -25,9 +24,8 @@ import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Random;
-
-import static java.lang.Thread.sleep;
 
 public class PuzzleActivity extends AppCompatActivity {
 
@@ -35,7 +33,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private RelativeLayout speechRL;
     private LinearLayout rootLL;
     private Thread t;
-    private boolean gameRunning = true;
+    private boolean gameRunning = true, puzzleComplete = false;
     private int mascotPosition = 0;
     private TextView speechText;
 
@@ -44,7 +42,11 @@ public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout row3;
 
     private ArrayList<ImagePiece> imagePieces;
+    private ArrayList<Integer> totalDrawables;
+    private ArrayList<Integer> usedDrawables;
     private ImagePiece firstClicked;
+
+    private Button nextPuzzleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,19 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleInit = findViewById(R.id.puzzleInit);
         puzzleInit.setVisibility(View.INVISIBLE);
         speechText = findViewById(R.id.speech_bubble_textView);
+        nextPuzzleButton = findViewById(R.id.nextPuzzleButton);
+
+        nextPuzzleButton.setVisibility(View.GONE);
+
+        totalDrawables = new ArrayList<>();
+        usedDrawables = new ArrayList<>(totalDrawables.size());
+
+        totalDrawables.add(R.drawable.roti_prata1);
+        totalDrawables.add(R.drawable.roti_prata2);
+        totalDrawables.add(R.drawable.laksa1);
+        totalDrawables.add(R.drawable.laksa2);
+        totalDrawables.add(R.drawable.satay1);
+        totalDrawables.add(R.drawable.satay2);
 
         setMascot();
 
@@ -141,8 +156,31 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void setPuzzlePiece() {
+        if(row1 != null || row2 !=null || row3 !=null) {
+            row1.removeAllViews();
+            row2.removeAllViews();
+            row3.removeAllViews();
+        }
+
         ArrayList<Integer> ranNum = new ArrayList<Integer>(12);
         ImageUtil imgUtil = new ImageUtil();
+
+        Random r = new Random();
+        int ranDrawableResource = totalDrawables.get(r.nextInt(totalDrawables.size()));
+        puzzleInit.setImageResource(ranDrawableResource);
+        int u = totalDrawables.size();
+
+
+        if(u != 1) {
+            for (int i = 0; i < u; i++) {
+                if (totalDrawables.get(i) != ranDrawableResource) {
+                    usedDrawables.add(totalDrawables.get(i));
+                }
+            }
+        }
+        
+        totalDrawables = usedDrawables; //Used Drawables actually UnusedDrawables, soz
+
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
         imagePieces = new ArrayList<>(12);
 
@@ -185,9 +223,7 @@ public class PuzzleActivity extends AppCompatActivity {
     public void switchPiece(ImagePiece ip){
         if(firstClicked == null){
             firstClicked = ip; //firstClicked = First ImagePiece clicked
-            Log.i("Click", "First Piece");
         }else{
-            Log.i("Click", "Second Piece");
             int temIndex = firstClicked.getCurrentIndex();
             firstClicked.setCurrentIndex(ip.getCurrentIndex());
             ip.setCurrentIndex(temIndex);
@@ -197,7 +233,6 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void MovePieces (){
-        //TODO Sort imagePieces based on current index;
         Collections.sort(imagePieces, new Comparator<ImagePiece>(){
             public int compare(ImagePiece p1, ImagePiece p2){
                 int a = p1.getCurrentIndex();
@@ -215,6 +250,24 @@ public class PuzzleActivity extends AppCompatActivity {
         row1.invalidate();
         row2.invalidate();
         row3.invalidate();
+
+        checkCompleteness();
+
+    }
+
+    private void checkCompleteness() {
+        for(ImagePiece ip: imagePieces){
+            if(ip.getCurrentIndex() == ip.getOriginalIndex()){
+                puzzleComplete = true;
+            } else {
+                puzzleComplete = false;
+                break;
+            }
+        }
+
+        if(puzzleComplete){
+            nextPuzzleButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setMascot() {
@@ -234,5 +287,21 @@ public class PuzzleActivity extends AppCompatActivity {
         lp2.rightMargin = -125;
         rootLL.setLayoutParams(lp2);
         rootLL.requestLayout();
+    }
+
+    public void onClick(View v){
+        switch(v.getId()){
+            case R.id.nextPuzzleButton:
+                //TODO add like a lot more images, preferably 20 images in total
+                nextImage();
+                nextPuzzleButton.setVisibility(View.GONE);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void nextImage() {
+        setPuzzlePiece();
     }
 }
