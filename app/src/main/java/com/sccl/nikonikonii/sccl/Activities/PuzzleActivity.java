@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -217,7 +215,6 @@ public class PuzzleActivity extends AppCompatActivity {
         row1.invalidate();
         row2.invalidate();
         row3.invalidate();
-
     }
 
     private void setMascot() {
