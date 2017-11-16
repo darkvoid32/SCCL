@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -164,24 +165,6 @@ public class PuzzleActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int userHeight = displayMetrics.heightPixels;
         int userWidth = displayMetrics.widthPixels;
-
-        //Layout params for mascot ImageView
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(userHeight/2, userWidth/2);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        lp.setMargins(12, 0, 0, 1);
-        mascotIV.setLayoutParams(lp);
-        mascotIV.requestLayout();
-
-        //Layout params for speech_bubble
-        RelativeLayout.LayoutParams lp3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        //speechIV.getLayoutParams().height = (userHeight / 2);
-        //speechIV.getLayoutParams().width = (userwWidth / 2);
-        //lp3.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        lp3.height = userHeight / 2;
-        lp3.width = userWidth / 2;
-        speechRL.setLayoutParams(lp3);
-        speechRL.requestLayout();
 
         //Layout params for Puzzle Image
         //TODO Remove hardcoding
