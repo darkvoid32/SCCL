@@ -25,6 +25,8 @@ import com.sccl.nikonikonii.sccl.Utils.ImagePiece;
 import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static java.lang.Thread.sleep;
 
@@ -37,6 +39,13 @@ public class PuzzleActivity extends AppCompatActivity {
     private boolean gameRunning = true;
     private int mascotPosition = 0;
     private TextView speechText;
+
+    private LinearLayout row1;
+    private LinearLayout row2;
+    private LinearLayout row3;
+
+    private ArrayList<ImagePiece> imagePieces;
+    private ImagePiece firstClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,17 +145,18 @@ public class PuzzleActivity extends AppCompatActivity {
         ImageUtil imgUtil = new ImageUtil();
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
-        ArrayList<ImagePiece> imagePieces = new ArrayList<>(12);
+        imagePieces = new ArrayList<>(12);
 
-        //TODO Figure out how to move IV around
         for (int i = 0; i < bitmapPieces.size(); i++) {
-            final ImagePiece piece = new ImagePiece(getApplicationContext(), bitmapPieces.get(i), i);
+            final ImagePiece piece = new ImagePiece(getApplicationContext(), this, bitmapPieces.get(i), i);
             imagePieces.add(piece);
+            piece.setOriginalIndex(i);
+            piece.setCurrentIndex(i);
         }
 
-        LinearLayout row1 = findViewById(R.id.firstRow);
-        LinearLayout row2 = findViewById(R.id.secondRow);
-        LinearLayout row3 = findViewById(R.id.thirdRow);
+        row1 = findViewById(R.id.firstRow);
+        row2 = findViewById(R.id.secondRow);
+        row3 = findViewById(R.id.thirdRow);
 
         for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
             if (i < imagePieces.size() / 3) {
@@ -158,6 +168,49 @@ public class PuzzleActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void switchPiece(ImagePiece ip){
+        if(firstClicked == null){
+            firstClicked = ip;
+            Log.d("Click", "First Piece");
+        }else{
+            Log.d("Click", "Second Piece");
+            int temIndex = firstClicked.getCurrentIndex();
+            firstClicked.setCurrentIndex(ip.getCurrentIndex());
+            ip.setCurrentIndex(temIndex);
+            firstClicked = null;
+            MovePieces();
+        }
+    }
+
+    private void MovePieces (){
+        //TODO Sort imagePieces based on current index;
+        Collections.sort(imagePieces, new Comparator<ImagePiece>(){
+            public int compare(ImagePiece p1, ImagePiece p2){
+                int a = p1.getCurrentIndex();
+                int b = p1.getCurrentIndex();
+                return Integer.compare(a,b);
+            }
+        });
+
+        row1.removeAllViews();
+        row2.removeAllViews();
+        row3.removeAllViews();
+
+        for (int i = 0; i < imagePieces.size(); i++) { //Adding bitmaps to the rows 1/2/3
+            if (i < imagePieces.size() / 3) {
+                row1.addView(imagePieces.get(i));
+            } else if (i < (imagePieces.size() / 3) * 2) {
+                row2.addView(imagePieces.get(i));
+            } else {
+                row3.addView(imagePieces.get(i));
+            }
+        }
+
+        row1.invalidate();
+        row2.invalidate();
+        row3.invalidate();
     }
 
     private void setMascot() {
