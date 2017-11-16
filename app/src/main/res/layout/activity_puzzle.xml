@@ -1,56 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageButton
         android:id="@+id/pauseButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="@drawable/circle"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_pause"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_margin="10dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_margin="10dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/colorPrimary"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_pause" />
 
     <ImageView
+        android:id="@+id/mascotIV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/panda0"
-        android:id="@+id/mascotIV"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:src="@drawable/panda0" />
+
+    <RelativeLayout
+        android:id="@+id/speech_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/mascotIV">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/speech_bubble" />
+
+        <TextView
+            android:id="@+id/speech_bubble_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/rootLL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rootLL"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/firstRow"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:id="@+id/firstRow">
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
+            android:id="@+id/secondRow"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:id="@+id/secondRow">
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
 
         <LinearLayout
+            android:id="@+id/thirdRow"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:id="@+id/thirdRow">
-        </LinearLayout>
+            android:orientation="horizontal"></LinearLayout>
     </LinearLayout>
 
     <ImageView
@@ -59,8 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/roti_prata1"
-        android:layout_marginRight="25dp"/>
+        android:src="@drawable/roti_prata1" />
 
 </RelativeLayout>
