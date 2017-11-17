@@ -121,7 +121,7 @@ public class PuzzleActivity extends AppCompatActivity {
     }
 
     private void changeMascotPosition() {
-        String text = "Thread running";
+        String text = "你们好！";
             switch(mascotPosition){
                 case 0:
                     mascotIV.setImageResource(R.drawable.panda1);
