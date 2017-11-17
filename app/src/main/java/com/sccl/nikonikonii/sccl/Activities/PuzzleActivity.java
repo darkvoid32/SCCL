@@ -301,7 +301,6 @@ public class PuzzleActivity extends AppCompatActivity {
         lp2.width = (userWidth / 4) * 3;
         lp2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         lp2.addRule(RelativeLayout.CENTER_VERTICAL);
-        lp2.rightMargin = -125;
         rootLL.setLayoutParams(lp2);
         rootLL.requestLayout();
     }
