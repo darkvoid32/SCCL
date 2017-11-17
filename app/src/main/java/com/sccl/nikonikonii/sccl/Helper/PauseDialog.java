@@ -1,4 +1,4 @@
-package com.sccl.nikonikonii.sccl.Activities;
+package com.sccl.nikonikonii.sccl.Helper;
 
 import android.app.Dialog;
 import android.content.Context;

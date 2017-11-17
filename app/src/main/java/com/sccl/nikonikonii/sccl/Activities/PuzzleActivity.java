@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sccl.nikonikonii.sccl.Helper.PauseDialog;
 import com.sccl.nikonikonii.sccl.R;
 import com.sccl.nikonikonii.sccl.Utils.ImagePiece;
 import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
@@ -27,7 +28,6 @@ import com.sccl.nikonikonii.sccl.imageClass;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Random;
 
 public class PuzzleActivity extends AppCompatActivity {
@@ -55,6 +55,7 @@ public class PuzzleActivity extends AppCompatActivity {
     private TextView puzzleCompeleteTextView;
 
     private Animation slide_down;
+    private ImageView pauseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,31 +65,26 @@ public class PuzzleActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_puzzle);
 
-        ImageButton pauseButton = findViewById(R.id.pauseButton);
+        initVariables(); //Initializing all Views
+        setMascot(); //Setting layout params for mascot
+        setPuzzlePiece(); //Setting first puzzle pieces
+        createMascotThread(); //Making mascot move and shit
+    }
 
-        //Setting pause button
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PauseDialog pauseDialog = new PauseDialog(PuzzleActivity.this);
-
-                pauseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                pauseDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-                pauseDialog.show();
-                pauseDialog.getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility());
-                pauseDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-            }
-        });
-
+    private void initVariables() {
+        //Initializing all views
+        pauseButton = findViewById(R.id.pauseButton);
         mascotIV = findViewById(R.id.mascotIV);
         speechRL = findViewById(R.id.speech_bubble);
         puzzleInit = findViewById(R.id.puzzleInit);
-        puzzleInit.setVisibility(View.INVISIBLE);
         speechText = findViewById(R.id.speech_bubble_textView);
         nextPuzzleButton = findViewById(R.id.nextPuzzleButton);
         puzzleCompeleteTextView = findViewById(R.id.puzzleCompleteTextView);
 
+        puzzleInit.setVisibility(View.INVISIBLE);
         nextPuzzleButton.setVisibility(View.GONE);
+
+        //Initializing all ArrayLists
 
         totalDrawables = new ArrayList<>();
         usedDrawables = new ArrayList<>(totalDrawables.size());
@@ -101,73 +97,11 @@ public class PuzzleActivity extends AppCompatActivity {
         totalDrawables.add(new imageClass(R.drawable.satay2, "沙爹"));
 
         slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
-
-        setMascot();
-
-        setPuzzlePiece();
-
-        createMascotThread();
     }
 
-    private void createMascotThread() {
-        t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    while (gameRunning) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                changeMascotPosition();
-                            }
-                        });
-                        Thread.sleep(2000);
-                    }
-                } catch (Exception ex) {
-                    Log.i("Game crashed", ex.toString());
-                }
-            }
-        });
-
-        t.start();
-    }
-
-    private void changeMascotPosition() {
-        String text = "你们好！";
-            switch(mascotPosition){
-                case 0:
-                    mascotIV.setImageResource(R.drawable.panda1);
-                    text += ".";
-                    break;
-                case 1:
-                    mascotIV.setImageResource(R.drawable.panda2);
-                    text += "..";
-                    break;
-                case 2:
-                    mascotIV.setImageResource(R.drawable.panda3);
-                    text += "...";
-                    break;
-                case 3:
-                    mascotIV.setImageResource(R.drawable.panda4);
-                    text += "....";
-                    break;
-                case 4:
-                    mascotIV.setImageResource(R.drawable.panda0);
-                    text += "";
-                    break;
-                default:
-                    break;
-            }
-
-            if(mascotPosition == 4){
-                mascotPosition = 0;
-            } else {
-                mascotPosition ++;
-            }
-            speechText.setText(text);
-    }
 
     private void setPuzzlePiece() {
-        if(row1 != null || row2 !=null || row3 !=null) {
+        if (row1 != null || row2 != null || row3 != null) {
             row1.removeAllViews();
             row2.removeAllViews();
             row3.removeAllViews();
@@ -182,7 +116,7 @@ public class PuzzleActivity extends AppCompatActivity {
         int u = totalDrawables.size();
 
 
-        if(u != 1) {
+        if (u != 1) {
             for (int i = 0; i < u; i++) {
                 if (totalDrawables.get(i).getResource() != ranDrawableResource) {
                     usedDrawables.add(totalDrawables.get(i));
@@ -233,10 +167,10 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     }
 
-    public void switchPiece(ImagePiece ip){
-        if(firstClicked == null){
+    public void switchPiece(ImagePiece ip) {
+        if (firstClicked == null) {
             firstClicked = ip; //firstClicked = First ImagePiece clicked
-        }else{
+        } else {
             int temIndex = firstClicked.getCurrentIndex();
             firstClicked.setCurrentIndex(ip.getCurrentIndex());
             ip.setCurrentIndex(temIndex);
@@ -245,12 +179,12 @@ public class PuzzleActivity extends AppCompatActivity {
         }
     }
 
-    private void MovePieces (){
-        Collections.sort(imagePieces, new Comparator<ImagePiece>(){
-            public int compare(ImagePiece p1, ImagePiece p2){
+    private void MovePieces() {
+        Collections.sort(imagePieces, new Comparator<ImagePiece>() {
+            public int compare(ImagePiece p1, ImagePiece p2) {
                 int a = p1.getCurrentIndex();
                 int b = p1.getCurrentIndex();
-                return Integer.compare(a,b);
+                return Integer.compare(a, b);
             }
         });
 
@@ -265,12 +199,11 @@ public class PuzzleActivity extends AppCompatActivity {
         row3.invalidate();
 
         checkCompleteness();
-
     }
 
     private void checkCompleteness() {
-        for(ImagePiece ip: imagePieces){
-            if(ip.getCurrentIndex() == ip.getOriginalIndex()){
+        for (ImagePiece ip : imagePieces) {
+            if (ip.getCurrentIndex() == ip.getOriginalIndex()) {
                 puzzleComplete = true;
             } else {
                 puzzleComplete = false;
@@ -278,12 +211,34 @@ public class PuzzleActivity extends AppCompatActivity {
             }
         }
 
-        if(puzzleComplete){
+        if (puzzleComplete) {
             puzzleCompeleteTextView.setVisibility(View.VISIBLE);
             puzzleCompeleteTextView.setText(currentImageShown.getWord());
             Log.i("Word", currentImageShown.getWord());
             puzzleCompeleteTextView.setAnimation(slide_down);
             nextPuzzleButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.nextPuzzleButton:
+                //TODO add like a lot more images, preferably 20 images in total
+                setPuzzlePiece(); //Setting next Image
+                nextPuzzleButton.setVisibility(View.GONE);
+                puzzleCompeleteTextView.setVisibility(View.GONE);
+                break;
+            case R.id.pauseButton:
+                PauseDialog pauseDialog = new PauseDialog(PuzzleActivity.this);
+
+                pauseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                pauseDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                pauseDialog.show();
+                pauseDialog.getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility());
+                pauseDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+                break;
+            default:
+                break;
         }
     }
 
@@ -305,20 +260,62 @@ public class PuzzleActivity extends AppCompatActivity {
         rootLL.requestLayout();
     }
 
-    public void onClick(View v){
-        switch(v.getId()){
-            case R.id.nextPuzzleButton:
-                //TODO add like a lot more images, preferably 20 images in total
-                nextImage();
-                nextPuzzleButton.setVisibility(View.GONE);
-                puzzleCompeleteTextView.setVisibility(View.GONE);
+    private void createMascotThread() {
+        t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    while (gameRunning) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                changeMascotPosition();
+                            }
+                        });
+                        Thread.sleep(2000);
+                    }
+                } catch (Exception ex) {
+                    Log.i("Game crashed", ex.toString());
+                }
+            }
+        });
+
+        t.start();
+    }
+
+    private void changeMascotPosition() {
+        String text = "你们好！";
+        switch (mascotPosition) {
+            case 0:
+                mascotIV.setImageResource(R.drawable.panda1);
+                text += ".";
+                break;
+            case 1:
+                mascotIV.setImageResource(R.drawable.panda2);
+                text += "..";
+                break;
+            case 2:
+                mascotIV.setImageResource(R.drawable.panda3);
+                text += "...";
+                break;
+            case 3:
+                mascotIV.setImageResource(R.drawable.panda4);
+                text += "....";
+                break;
+            case 4:
+                mascotIV.setImageResource(R.drawable.panda0);
+                text += "";
                 break;
             default:
                 break;
         }
+
+        if (mascotPosition == 4) {
+            mascotPosition = 0;
+        } else {
+            mascotPosition++;
+        }
+        speechText.setText(text);
     }
 
-    private void nextImage() {
-        setPuzzlePiece();
-    }
+
 }
