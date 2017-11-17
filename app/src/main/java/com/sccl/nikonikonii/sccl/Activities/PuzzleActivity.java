@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import android.widget.TextView;
 import com.sccl.nikonikonii.sccl.R;
 import com.sccl.nikonikonii.sccl.Utils.ImagePiece;
 import com.sccl.nikonikonii.sccl.Utils.ImageUtil;
+import com.sccl.nikonikonii.sccl.imageClass;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,11 +45,16 @@ public class PuzzleActivity extends AppCompatActivity {
     private LinearLayout row3;
 
     private ArrayList<ImagePiece> imagePieces;
-    private ArrayList<Integer> totalDrawables;
-    private ArrayList<Integer> usedDrawables;
+    private ArrayList<imageClass> usedDrawables;
+    private ArrayList<imageClass> totalDrawables;
     private ImagePiece firstClicked;
+    private imageClass currentImageShown;
 
     private Button nextPuzzleButton;
+
+    private TextView puzzleCompeleteTextView;
+
+    private Animation slide_down;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +86,21 @@ public class PuzzleActivity extends AppCompatActivity {
         puzzleInit.setVisibility(View.INVISIBLE);
         speechText = findViewById(R.id.speech_bubble_textView);
         nextPuzzleButton = findViewById(R.id.nextPuzzleButton);
+        puzzleCompeleteTextView = findViewById(R.id.puzzleCompleteTextView);
 
         nextPuzzleButton.setVisibility(View.GONE);
 
         totalDrawables = new ArrayList<>();
         usedDrawables = new ArrayList<>(totalDrawables.size());
 
-        totalDrawables.add(R.drawable.roti_prata1);
-        totalDrawables.add(R.drawable.roti_prata2);
-        totalDrawables.add(R.drawable.laksa1);
-        totalDrawables.add(R.drawable.laksa2);
-        totalDrawables.add(R.drawable.satay1);
-        totalDrawables.add(R.drawable.satay2);
+        totalDrawables.add(new imageClass(R.drawable.chicken_rice1, "鸡饭"));
+        totalDrawables.add(new imageClass(R.drawable.chicken_rice2, "鸡饭"));
+        totalDrawables.add(new imageClass(R.drawable.laksa1, "叻沙"));
+        totalDrawables.add(new imageClass(R.drawable.laksa2, "叻沙"));
+        totalDrawables.add(new imageClass(R.drawable.satay1, "沙爹"));
+        totalDrawables.add(new imageClass(R.drawable.satay2, "沙爹"));
+
+        slide_down = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down);
 
         setMascot();
 
@@ -166,19 +177,21 @@ public class PuzzleActivity extends AppCompatActivity {
         ImageUtil imgUtil = new ImageUtil();
 
         Random r = new Random();
-        int ranDrawableResource = totalDrawables.get(r.nextInt(totalDrawables.size()));
+        int ranDrawableResource = totalDrawables.get(r.nextInt(totalDrawables.size())).getResource();
         puzzleInit.setImageResource(ranDrawableResource);
         int u = totalDrawables.size();
 
 
         if(u != 1) {
             for (int i = 0; i < u; i++) {
-                if (totalDrawables.get(i) != ranDrawableResource) {
+                if (totalDrawables.get(i).getResource() != ranDrawableResource) {
                     usedDrawables.add(totalDrawables.get(i));
+                } else {
+                    currentImageShown = totalDrawables.get(i);
                 }
             }
         }
-        
+
         totalDrawables = usedDrawables; //Used Drawables actually UnusedDrawables, soz
 
         ArrayList<Bitmap> bitmapPieces = imgUtil.splitImage(puzzleInit);
@@ -266,6 +279,10 @@ public class PuzzleActivity extends AppCompatActivity {
         }
 
         if(puzzleComplete){
+            puzzleCompeleteTextView.setVisibility(View.VISIBLE);
+            puzzleCompeleteTextView.setText(currentImageShown.getWord());
+            Log.i("Word", currentImageShown.getWord());
+            puzzleCompeleteTextView.setAnimation(slide_down);
             nextPuzzleButton.setVisibility(View.VISIBLE);
         }
     }
@@ -295,6 +312,7 @@ public class PuzzleActivity extends AppCompatActivity {
                 //TODO add like a lot more images, preferably 20 images in total
                 nextImage();
                 nextPuzzleButton.setVisibility(View.GONE);
+                puzzleCompeleteTextView.setVisibility(View.GONE);
                 break;
             default:
                 break;
