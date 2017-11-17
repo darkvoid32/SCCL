@@ -24,7 +24,7 @@
         <!--Mascot-->
         <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.4"
             android:layout_height="match_parent">
 
             <LinearLayout
@@ -67,6 +67,11 @@
 
             </LinearLayout>
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"/>
 
         <!--Puzzle Layout-->
         <RelativeLayout
@@ -120,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/puzzleCompleteTextView"
                 android:textSize="60dp"
+                android:layout_marginRight="50dp"
                 android:layout_above="@id/firstRow"
                 android:layout_centerHorizontal="true"
                 android:textColor="@android:color/black"
