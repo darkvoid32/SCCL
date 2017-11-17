@@ -118,7 +118,7 @@
                 android:id="@+id/puzzleCompleteTextView"
                 android:textSize="60dp"
                 android:layout_above="@id/firstRow"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
                 android:textColor="@android:color/black"
                 android:visibility="gone"
                 tools:ignore="NotSibling" />
